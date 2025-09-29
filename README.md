@@ -10,7 +10,7 @@ https://drive.google.com/file/d/16Q9FEQLLYV_XQBIg9AdanxqrM4JpdcxR/view?usp=drive
 
 ## 📌 Approach
 ### Step 1 — Semantic Search & Clause Retrieval
-- **Document Processing:** PDF/DOC/DOCX files are chunked using `RecursiveCharacterTextSplitter`
+- **Document Processing:** PDF files are chunked using `RecursiveCharacterTextSplitter`
 - **Embedding Generation:** Uses `nomic-ai/nomic-embed-text-v1` sentence transformers to create vector representations
 - **Similarity Matching:** Cosine similarity between attribute queries and document chunks to find most relevant clauses
 - **Clause Extraction:** Retrieves the best matching template clause and candidate clause for comparison
