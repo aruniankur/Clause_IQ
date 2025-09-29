@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+.gitattributes
 
 # C extensions
 *.so
@@ -124,7 +125,8 @@ venv.bak/
 .mypy_cache/
 .dmypy.json
 dmypy.json
-
+DOCKER-SETUP-SUMMARY.md
+Makefile
 # Pyre type checker
 .pyre/
 

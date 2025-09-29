@@ -1,0 +1,50 @@
+services:
+  clause_iq:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: clause_iq_app
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_APP=app.py
+      - FLASK_ENV=production
+      - PYTHONUNBUFFERED=1
+      # Add any API keys or environment variables here
+      # - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      # - HUGGINGFACE_TOKEN=${HUGGINGFACE_TOKEN}
+    volumes:
+      # Persist uploaded files
+      - ./uploads:/app/uploads
+      # Persist standard templates (if you want to modify them)
+      - ./standard_tempate_default:/app/standard_tempate_default
+      # Optional: Mount code for development (comment out for production)
+      # - ./app.py:/app/app.py
+      # - ./helper.py:/app/helper.py
+      # - ./prompts.py:/app/prompts.py
+    networks:
+      - clause_iq_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    # Resource limits (adjust based on your needs)
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G
+        reservations:
+          cpus: '1'
+          memory: 2G
+
+networks:
+  clause_iq_network:
+    driver: bridge
+
+volumes:
+  uploads_data:
+    driver: local
