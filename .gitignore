@@ -132,7 +132,6 @@ dmypy.json
 uploads/
 *.doc
 *.docx
-*.txt
 
 # IDE
 .vscode/

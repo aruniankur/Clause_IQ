@@ -60,9 +60,131 @@
             padding: 20px;
             margin-top: 20px;
         }
+        .attributes-table {
+            font-size: 0.9rem;
+        }
+        .attributes-table th {
+            background-color: #e9ecef;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        .attributes-table td {
+            vertical-align: top;
+            padding: 8px;
+        }
+        .attribute-name {
+            font-weight: 600;
+            color: #495057;
+        }
+        .section-info {
+            color: #6c757d;
+            font-size: 0.8rem;
+        }
+        .description-text {
+            color: #495057;
+            font-size: 0.8rem;
+            line-height: 1.4;
+        }
+        .extracted-language {
+            font-family: 'Courier New', monospace;
+            font-size: 0.75rem;
+            color: #6c757d;
+            background-color: #f8f9fa;
+            padding: 4px;
+            border-radius: 3px;
+            line-height: 1.3;
+        }
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        .loading-content {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .loading-text {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .loading-subtext {
+            font-size: 14px;
+            color: #666;
+        }
+        .loading-progress {
+            width: 100%;
+            height: 4px;
+            background-color: #f0f0f0;
+            border-radius: 2px;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+        .loading-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+            animation: progress 2s ease-in-out infinite;
+        }
+        .expandable-text {
+            max-height: 100px; /* Adjust as needed */
+            overflow: hidden;
+            position: relative;
+            transition: max-height 0.5s ease-out;
+        }
+        .expandable-text.expanded {
+            max-height: 2000px; /* Adjust to a large value */
+            transition: max-height 0.5s ease-in;
+        }
+        .show-more {
+            cursor: pointer;
+            color: #0d6efd;
+            text-decoration: underline;
+            display: block;
+            margin-top: 5px;
+        }
+        @keyframes progress {
+            0% { width: 0%; }
+            50% { width: 70%; }
+            100% { width: 100%; }
+        }
     </style>
 </head>
 <body>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Analyzing Documents...</div>
+            <div class="loading-subtext">This may take a few moments</div>
+            <div class="loading-progress">
+                <div class="loading-progress-bar"></div>
+            </div>
+        </div>
+    </div>
     <!-- Hero Section -->
     <div class="hero-section">
         <div class="container">
@@ -135,45 +257,19 @@
                                 <div id="personalFile1Preview" class="mt-2"></div>
                             </div>
 
-                            <!-- Attributes Input -->
+                            <!-- Attributes File Upload -->
                             <div class="mb-4">
                                 <label class="form-label fw-bold">
-                                    <i class="fas fa-list me-2"></i>Attributes to Compare
+                                    <i class="fas fa-file-excel me-2"></i>Attributes File Upload
                                 </label>
-                                
-                                <!-- Toggle between manual input and file upload -->
-                                <div class="mb-3">
-                                    <div class="btn-group w-100" role="group">
-                                        <input type="radio" class="btn-check" name="attributeInputType1" id="manualInput1" value="manual" checked>
-                                        <label class="btn btn-outline-primary" for="manualInput1">
-                                            <i class="fas fa-keyboard me-2"></i>Manual Input
-                                        </label>
-                                        
-                                        <input type="radio" class="btn-check" name="attributeInputType1" id="fileUpload1" value="file">
-                                        <label class="btn btn-outline-primary" for="fileUpload1">
-                                            <i class="fas fa-file-excel me-2"></i>Upload File
-                                        </label>
-                                    </div>
+                                <div class="upload-area" onclick="document.getElementById('attributesFile1').click()">
+                                    <i class="fas fa-file-excel fa-3x text-muted mb-3"></i>
+                                    <p class="mb-2">Click to upload Excel/CSV file</p>
+                                    <p class="text-muted small">Excel (.xlsx, .xls) or CSV files only</p>
+                                    <input type="file" id="attributesFile1" name="attributesFile" accept=".xlsx,.xls,.csv" style="display: none;">
                                 </div>
-
-                                <!-- Manual Input Section -->
-                                <div id="manualInputSection1">
-                                    <textarea class="form-control" id="attributes1" name="attributes" rows="3" 
-                                        placeholder="Enter attributes separated by commas (e.g., Payment Terms, Delivery Schedule, Liability Limits)"></textarea>
-                                    <div class="form-text">Specify the contract attributes you want to compare between your clause and the template</div>
-                                </div>
-
-                                <!-- File Upload Section -->
-                                <div id="fileUploadSection1" style="display: none;">
-                                    <div class="upload-area" onclick="document.getElementById('attributesFile1').click()">
-                                        <i class="fas fa-file-excel fa-3x text-muted mb-3"></i>
-                                        <p class="mb-2">Click to upload Excel/CSV file</p>
-                                        <p class="text-muted small">Excel (.xlsx, .xls) or CSV files only</p>
-                                        <input type="file" id="attributesFile1" name="attributesFile" accept=".xlsx,.xls,.csv" style="display: none;">
-                                    </div>
-                                    <div id="attributesFile1Preview" class="mt-2"></div>
-                                    <div class="form-text">Upload an Excel or CSV file with attributes in the first column</div>
-                                </div>
+                                <div id="attributesFile1Preview" class="mt-2"></div>
+                                <div class="form-text">Upload an Excel or CSV file with attributes in the first column</div>
                             </div>
 
                             <div class="mt-auto">
@@ -204,8 +300,8 @@
                                 </label>
                                 <select class="form-select" id="templateSelect" name="templateSelect">
                                     <option value="">Choose a template...</option>
-                                    <option value="TN">Tennessee Standard Template</option>
-                                    <option value="WA">Washington Standard Template</option>
+                                    <option value="TN">TN Standard Template</option>
+                                    <option value="WA">WA Standard Template</option>
                                 </select>
                                 <div class="form-text">Choose from our curated collection of standard contract templates</div>
                             </div>
@@ -224,72 +320,19 @@
                                 <div id="personalFile2Preview" class="mt-2"></div>
                             </div>
 
-                            <!-- Attributes Selection -->
+                            <!-- Attributes File Upload -->
                             <div class="mb-4">
                                 <label class="form-label fw-bold">
-                                    <i class="fas fa-check-square me-2"></i>Select Attributes to Compare
+                                    <i class="fas fa-file-excel me-2"></i>Attributes File Upload
                                 </label>
-                                
-                                <!-- Toggle between predefined checkboxes and file upload -->
-                                <div class="mb-3">
-                                    <div class="btn-group w-100" role="group">
-                                        <input type="radio" class="btn-check" name="attributeInputType2" id="predefined2" value="predefined" checked>
-                                        <label class="btn btn-outline-primary" for="predefined2">
-                                            <i class="fas fa-check-square me-2"></i>Predefined
-                                        </label>
-                                        
-                                        <input type="radio" class="btn-check" name="attributeInputType2" id="fileUpload2" value="file">
-                                        <label class="btn btn-outline-primary" for="fileUpload2">
-                                            <i class="fas fa-file-excel me-2"></i>Upload File
-                                        </label>
-                                    </div>
+                                <div class="upload-area" onclick="document.getElementById('attributesFile2').click()">
+                                    <i class="fas fa-file-excel fa-3x text-muted mb-3"></i>
+                                    <p class="mb-2">Click to upload Excel/CSV file</p>
+                                    <p class="text-muted small">Excel (.xlsx, .xls) or CSV files only</p>
+                                    <input type="file" id="attributesFile2" name="attributesFile" accept=".xlsx,.xls,.csv" style="display: none;">
                                 </div>
-
-                                <!-- Predefined Attributes Section -->
-                                <div id="predefinedSection2">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="payment_terms" id="attr1">
-                                                <label class="form-check-label" for="attr1">Payment Terms</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="delivery_schedule" id="attr2">
-                                                <label class="form-check-label" for="attr2">Delivery Schedule</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="liability_limits" id="attr3">
-                                                <label class="form-check-label" for="attr3">Liability Limits</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="termination_clause" id="attr4">
-                                                <label class="form-check-label" for="attr4">Termination Clause</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="force_majeure" id="attr5">
-                                                <label class="form-check-label" for="attr5">Force Majeure</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="dispute_resolution" id="attr6">
-                                                <label class="form-check-label" for="attr6">Dispute Resolution</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- File Upload Section -->
-                                <div id="fileUploadSection2" style="display: none;">
-                                    <div class="upload-area" onclick="document.getElementById('attributesFile2').click()">
-                                        <i class="fas fa-file-excel fa-3x text-muted mb-3"></i>
-                                        <p class="mb-2">Click to upload Excel/CSV file</p>
-                                        <p class="text-muted small">Excel (.xlsx, .xls) or CSV files only</p>
-                                        <input type="file" id="attributesFile2" name="attributesFile" accept=".xlsx,.xls,.csv" style="display: none;">
-                                    </div>
-                                    <div id="attributesFile2Preview" class="mt-2"></div>
-                                    <div class="form-text">Upload an Excel or CSV file with attributes in the first column</div>
-                                </div>
+                                <div id="attributesFile2Preview" class="mt-2"></div>
+                                <div class="form-text">Upload an Excel or CSV file with attributes in the first column</div>
                             </div>
 
                             <div class="mt-auto">
@@ -356,6 +399,12 @@
             input.addEventListener('change', function(e) {
                 const file = e.target.files[0];
                 if (file) {
+                    // Check if this is an attributes file
+                    if (inputId.includes('attributesFile')) {
+                        // Clear any existing attributes file from the other workflow
+                        clearOtherAttributesFile(inputId);
+                        processAttributesFile(file, preview);
+                    } else {
                     preview.innerHTML = `
                         <div class="alert alert-success d-flex align-items-center">
                             <i class="fas fa-check-circle me-2"></i>
@@ -363,7 +412,193 @@
                         </div>
                     `;
                 }
+                }
             });
+        }
+
+        // Clear attributes file from the other workflow
+        function clearOtherAttributesFile(currentInputId) {
+            const otherInputId = currentInputId === 'attributesFile1' ? 'attributesFile2' : 'attributesFile1';
+            const otherPreviewId = currentInputId === 'attributesFile1' ? 'attributesFile2Preview' : 'attributesFile1Preview';
+            
+            // Clear the other input
+            const otherInput = document.getElementById(otherInputId);
+            if (otherInput) {
+                otherInput.value = '';
+            }
+            
+            // Clear the other preview
+            const otherPreview = document.getElementById(otherPreviewId);
+            if (otherPreview) {
+                otherPreview.innerHTML = '';
+            }
+        }
+
+        // Process attributes file and show preview
+        function processAttributesFile(file, previewElement) {
+            // Validate file type
+            const allowedTypes = ['.xlsx', '.xls', '.csv'];
+            const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+            
+            if (!allowedTypes.includes(fileExtension)) {
+                previewElement.innerHTML = `
+                    <div class="alert alert-danger d-flex align-items-center">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <span>Invalid file type. Please upload Excel (.xlsx, .xls) or CSV files only.</span>
+                    </div>
+                `;
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            // Show loading state
+            previewElement.innerHTML = `
+                <div class="alert alert-info d-flex align-items-center">
+                    <i class="fas fa-spinner fa-spin me-2"></i>
+                    <span>Processing ${file.name}...</span>
+                </div>
+            `;
+            
+            // Automatically send to backend
+            fetch('/process_excel_csv', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    previewElement.innerHTML = `
+                        <div class="alert alert-danger d-flex align-items-center">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <span>Error: ${data.error}</span>
+                        </div>
+                    `;
+                } else {
+                    // Show file info and preview table
+                    const fileInfo = data.file_info;
+                    const csvTable = data.csv_table;
+                    
+                    previewElement.innerHTML = `
+                        <div class="alert alert-success d-flex align-items-center mb-3">
+                            <i class="fas fa-check-circle me-2"></i>
+                            <span>${file.name} processed successfully! (${fileInfo.rows} rows, ${fileInfo.columns} columns)</span>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-sm table-bordered attributes-table">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Attribute</th>
+                                        <th>Example Section in Document</th>
+                                        <th>Description</th>
+                                        <th>Example Extracted Language</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${getAttributesTableRows(csvTable, fileInfo.rows)}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="alert alert-info mt-2">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <small>Attributes will be extracted from the "Attribute" column for analysis.</small>
+                        </div>
+                    `;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                previewElement.innerHTML = `
+                    <div class="alert alert-danger d-flex align-items-center">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <span>Error processing file: ${error.message}</span>
+                    </div>
+                `;
+            });
+        }
+
+        // Helper function to generate table rows for attributes data
+        function getAttributesTableRows(csvTable, maxRows) {
+            try {
+                const rows = [];
+                const displayRows = Math.min(maxRows || 0, 5); // Show max 5 rows in preview
+                
+                // Validate csvTable
+                if (!csvTable || typeof csvTable !== 'object') {
+                    return '<tr><td colspan="4" class="text-center text-muted">No data available</td></tr>';
+                }
+                
+                // Get the data arrays with fallbacks
+                const attributes = csvTable['Attribute'] || [];
+                const sections = csvTable['Example Section in Document'] || [];
+                const descriptions = csvTable['Description'] || [];
+                const extractedLanguage = csvTable['Example Extracted Language'] || [];
+                
+                // Ensure we have at least one attribute
+                if (attributes.length === 0) {
+                    return '<tr><td colspan="4" class="text-center text-muted">No attributes found in the file</td></tr>';
+                }
+                
+                for (let i = 0; i < displayRows; i++) {
+                    const attribute = (attributes[i] || '').toString();
+                    const section = (sections[i] || '').toString();
+                    const description = (descriptions[i] || '').toString();
+                    const language = (extractedLanguage[i] || '').toString();
+                    
+                    // Truncate long text for preview
+                    const truncatedDescription = description.length > 100 ? description.substring(0, 100) + '...' : description;
+                    const truncatedLanguage = language.length > 150 ? language.substring(0, 150) + '...' : language;
+                    
+                    rows.push(`
+                        <tr>
+                            <td><span class="attribute-name">${escapeHtml(attribute)}</span></td>
+                            <td><span class="section-info">${escapeHtml(section)}</span></td>
+                            <td><span class="description-text">${escapeHtml(truncatedDescription)}</span></td>
+                            <td><span class="extracted-language">${escapeHtml(truncatedLanguage)}</span></td>
+                        </tr>
+                    `);
+                }
+                
+                if (maxRows > 5) {
+                    rows.push(`<tr><td colspan="4" class="text-center text-muted">... and ${maxRows - 5} more attributes</td></tr>`);
+                }
+                
+                return rows.join('');
+            } catch (error) {
+                console.error('Error in getAttributesTableRows:', error);
+                return '<tr><td colspan="4" class="text-center text-danger">Error rendering table data</td></tr>';
+            }
+        }
+
+        // Helper function to escape HTML
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Helper function to generate table rows (legacy - for other file types)
+        function getTableRows(csvTable, maxRows, maxCols) {
+            const columnNames = Object.keys(csvTable);
+            const rows = [];
+            const displayRows = Math.min(maxRows, 5); // Show max 5 rows in preview
+            
+            for (let i = 0; i < displayRows; i++) {
+                const row = [];
+                for (let j = 0; j < Math.min(maxCols, 3); j++) { // Show max 3 columns in preview
+                    const colName = columnNames[j];
+                    const value = csvTable[colName] && csvTable[colName][i] ? csvTable[colName][i] : '';
+                    row.push(`<td>${value}</td>`);
+                }
+                rows.push(`<tr>${row.join('')}</tr>`);
+            }
+            
+            if (maxRows > 5) {
+                rows.push(`<tr><td colspan="${Math.min(maxCols, 3)}" class="text-center text-muted">... and ${maxRows - 5} more rows</td></tr>`);
+            }
+            
+            return rows.join('');
         }
 
         // Setup file uploads
@@ -405,48 +640,6 @@
         setupDragDrop('upload-area', 'attributesFile1');
         setupDragDrop('upload-area', 'attributesFile2');
 
-        // Toggle functionality for attribute input types
-        function setupAttributeToggle(workflowNum) {
-            const manualInput = document.getElementById(`manualInput${workflowNum}`);
-            const fileUpload = document.getElementById(`fileUpload${workflowNum}`);
-            const predefined = document.getElementById(`predefined${workflowNum}`);
-            
-            const manualSection = document.getElementById(`manualInputSection${workflowNum}`);
-            const fileSection = document.getElementById(`fileUploadSection${workflowNum}`);
-            const predefinedSection = document.getElementById(`predefinedSection${workflowNum}`);
-
-            if (manualInput) {
-                manualInput.addEventListener('change', function() {
-                    if (this.checked) {
-                        manualSection.style.display = 'block';
-                        fileSection.style.display = 'none';
-                    }
-                });
-            }
-
-            if (fileUpload) {
-                fileUpload.addEventListener('change', function() {
-                    if (this.checked) {
-                        manualSection.style.display = 'none';
-                        fileSection.style.display = 'block';
-                        if (predefinedSection) predefinedSection.style.display = 'none';
-                    }
-                });
-            }
-
-            if (predefined) {
-                predefined.addEventListener('change', function() {
-                    if (this.checked) {
-                        predefinedSection.style.display = 'block';
-                        fileSection.style.display = 'none';
-                    }
-                });
-            }
-        }
-
-        // Setup toggles for both workflows
-        setupAttributeToggle(1);
-        setupAttributeToggle(2);
 
         // Form submission
         document.getElementById('workflow1Form').addEventListener('submit', function(e) {
@@ -463,35 +656,25 @@
             const formData = new FormData();
             const templateFile = document.getElementById('templateFile1').files[0];
             const personalFile = document.getElementById('personalFile1').files[0];
-            
-            // Check which attribute input method is selected
-            const attributeInputType = document.querySelector('input[name="attributeInputType1"]:checked').value;
-            let attributes = '';
-            
-            if (attributeInputType === 'manual') {
-                attributes = document.getElementById('attributes1').value;
-                if (!attributes.trim()) {
-                    alert('Please enter attributes manually or upload a file');
-                    return;
-                }
-            } else if (attributeInputType === 'file') {
-                const attributesFile = document.getElementById('attributesFile1').files[0];
-                if (!attributesFile) {
-                    alert('Please upload an attributes file');
-                    return;
-                }
-                formData.append('attributesFile', attributesFile);
+            const attributesFile = document.getElementById('attributesFile1').files[0];
+
+            if (!templateFile || !personalFile || !attributesFile) {
+                alert('Please upload all required files (template, personal, and attributes)');
+                return;
             }
 
-            if (!templateFile || !personalFile) {
-                alert('Please upload both template and personal files');
+            // Validate attributes file type
+            const allowedTypes = ['.xlsx', '.xls', '.csv'];
+            const fileExtension = '.' + attributesFile.name.split('.').pop().toLowerCase();
+            if (!allowedTypes.includes(fileExtension)) {
+                alert('Attributes file must be Excel (.xlsx, .xls) or CSV format');
                 return;
             }
 
             formData.append('templateFile', templateFile);
             formData.append('personalFile', personalFile);
-            formData.append('attributes', attributes);
-            formData.append('attributeInputType', attributeInputType);
+            formData.append('attributesFile', attributesFile);
+            formData.append('attributeInputType', 'file');
             formData.append('workflow', '1');
 
             submitAnalysis(formData);
@@ -501,43 +684,50 @@
             const formData = new FormData();
             const templateSelect = document.getElementById('templateSelect').value;
             const personalFile = document.getElementById('personalFile2').files[0];
-            
-            // Check which attribute input method is selected
-            const attributeInputType = document.querySelector('input[name="attributeInputType2"]:checked').value;
-            let attributes = '';
-            
-            if (attributeInputType === 'predefined') {
-                const selectedAttributes = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
-                if (selectedAttributes.length === 0) {
-                    alert('Please select at least one predefined attribute or upload a file');
-                    return;
-                }
-                attributes = selectedAttributes.join(',');
-            } else if (attributeInputType === 'file') {
-                const attributesFile = document.getElementById('attributesFile2').files[0];
-                if (!attributesFile) {
-                    alert('Please upload an attributes file');
-                    return;
-                }
-                formData.append('attributesFile', attributesFile);
+            const attributesFile = document.getElementById('attributesFile2').files[0];
+
+            if (!templateSelect || !personalFile || !attributesFile) {
+                alert('Please select a template and upload all required files (personal and attributes)');
+                return;
             }
 
-            if (!templateSelect || !personalFile) {
-                alert('Please select a template and upload your personal file');
+            // Validate attributes file type
+            const allowedTypes = ['.xlsx', '.xls', '.csv'];
+            const fileExtension = '.' + attributesFile.name.split('.').pop().toLowerCase();
+            if (!allowedTypes.includes(fileExtension)) {
+                alert('Attributes file must be Excel (.xlsx, .xls) or CSV format');
                 return;
             }
 
             formData.append('templateSelect', templateSelect);
             formData.append('personalFile', personalFile);
-            formData.append('attributes', attributes);
-            formData.append('attributeInputType', attributeInputType);
+            formData.append('attributesFile', attributesFile);
+            formData.append('attributeInputType', 'file');
             formData.append('workflow', '2');
 
             submitAnalysis(formData);
         }
 
+        function showLoadingOverlay(message = 'Analyzing Documents...', subtext = 'This may take a few moments') {
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const loadingText = loadingOverlay.querySelector('.loading-text');
+            const loadingSubtext = loadingOverlay.querySelector('.loading-subtext');
+            
+            loadingText.textContent = message;
+            loadingSubtext.textContent = subtext;
+            loadingOverlay.style.display = 'flex';
+        }
+
+        function hideLoadingOverlay() {
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            loadingOverlay.style.display = 'none';
+        }
+
         function submitAnalysis(formData) {
-            // Show loading state
+            // Show loading overlay
+            showLoadingOverlay('Analyzing Documents...', 'Processing your files and running AI analysis');
+            
+            // Disable submit buttons
             const submitButtons = document.querySelectorAll('button[type="submit"]');
             submitButtons.forEach(btn => {
                 btn.disabled = true;
@@ -557,6 +747,10 @@
                 alert('An error occurred during analysis');
             })
             .finally(() => {
+                // Hide loading overlay
+                hideLoadingOverlay();
+                
+                // Re-enable submit buttons
                 submitButtons.forEach(btn => {
                     btn.disabled = false;
                     btn.innerHTML = '<i class="fas fa-search me-2"></i>Analyze & Compare';
@@ -575,10 +769,15 @@
                 // Display actual results from backend
                 data.results.forEach(result => {
                     const row = document.createElement('tr');
+                    
+                    const attributeCell = createExpandableCell(result.attribute);
+                    const yourClauseCell = createExpandableCell(result.your_clause);
+                    const templateClauseCell = createExpandableCell(result.template_clause);
+
                     row.innerHTML = `
-                        <td>${result.attribute}</td>
-                        <td>${result.your_clause}</td>
-                        <td>${result.template_clause}</td>
+                        <td>${attributeCell}</td>
+                        <td>${yourClauseCell}</td>
+                        <td>${templateClauseCell}</td>
                         <td><span class="badge bg-${getMatchColor(result.match_status)}">${result.match_status}</span></td>
                         <td>${result.confidence}</td>
                     `;
@@ -609,8 +808,32 @@
             preview.scrollIntoView({ behavior: 'smooth' });
         }
 
+        function createExpandableCell(content, maxLength = 200) {
+            if (content.length <= maxLength) {
+                return content;
+            }
+
+            return `
+                <div class="expandable-text">
+                    ${content}
+                </div>
+                <span class="show-more" onclick="toggleText(this)">Show more</span>
+            `;
+        }
+
+        function toggleText(element) {
+            const expandableText = element.previousElementSibling;
+            expandableText.classList.toggle('expanded');
+            if (expandableText.classList.contains('expanded')) {
+                element.textContent = 'Show less';
+            } else {
+                element.textContent = 'Show more';
+            }
+        }
+
         function getMatchColor(match) {
             switch(match) {
+                case 'Standard': return 'success';
                 case 'Good': return 'success';
                 case 'Partial': return 'warning';
                 case 'Different': return 'danger';
