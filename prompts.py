@@ -31,17 +31,6 @@ The structure or applicability of the clause is significantly altered.
 A regulatory or compliance obligation is omitted, reduced, or changed.
 In short: changes the meaning or adds risks.
 
-None
-
-Return "None" when:
-
-The contract clause is irrelevant to the given attribute.
-Example: Attribute = Medicaid Timely Filing, but the clause is about provider credentialing.
-The text is random, incomplete, or garbage (nonsense / non-contractual language).
-The clause does not contain enough information to be compared meaningfully.
-
-In short: irrelevant or unusable text.
-
 Output Requirements
 
 Always output only valid JSON.

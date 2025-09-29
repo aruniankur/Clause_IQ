@@ -170,7 +170,6 @@ def analyze():
         print("--------------------------------")
         print(f"Loaded {len(template_docs)} pages")
         print(f"Loaded {len(personal_docs)} pages")
-        print(f"DF Dictionary: {df_dict}")
 
         text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=2000,   # size of each chunk

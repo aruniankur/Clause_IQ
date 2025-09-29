@@ -56,12 +56,10 @@ def getresult(template_clause,template_embedding,contract_clause,contract_embedd
     a_con_cosine_scores = np.dot(contract_vec, attribute_vec) / (
         np.linalg.norm(contract_vec) * np.linalg.norm(attribute_vec)
     )
-    print(a_tem_cosine_scores,a_con_cosine_scores)
-    print(a_tem_cosine_scores.argsort()[-1:][::-1],a_con_cosine_scores.argsort()[-1:][::-1])
     tem_doc = template_clause[a_tem_cosine_scores.argsort()[-1:][::-1][0]]
     con_doc = contract_clause[a_con_cosine_scores.argsort()[-1:][::-1][0]]
 
-    print(tem_doc,con_doc)
+    #print(tem_doc,con_doc)
     print("-------------------------------fffff-")
     content = get_qwen_response(attribute,tem_doc,con_doc)
     print(content)
