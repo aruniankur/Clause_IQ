@@ -1,6 +1,6 @@
 # HiLabs Hackathon 2025: Smart Contract Language Tagging for Negotiation Assist
 
-![Untitled](https://github.com/user-attachments/assets/d896bf74-5ee9-4c7c-b72a-64a3c0c53295)
+![Untitled](images/1.jpeg)
 ---
 
 ## 📌 Approach
@@ -44,7 +44,7 @@ Clause_IQ/
 
 1. **Clone the repository:**
 ```bash
-git clone <repository-url>
+git clone https://github.com/aruniankur/Clause_IQ.git
 cd Clause_IQ
 ```
 
@@ -108,11 +108,11 @@ http://localhost:5000
 3. Upload an attributes file (Excel/CSV) with attributes in the first column
 4. Click "Analyze & Compare"
 
-![Untitled](https://github.com/user-attachments/assets/f30d266f-f3fe-4321-832d-a9cad3e24ccc)
+![Untitled](images/2.jpeg)
 
 ### Example Output 
 
-![Untitled](https://github.com/user-attachments/assets/280ae0b0-0630-4d30-8ca0-10add4066dde)
+![Untitled](images/3.jpeg)
 
 
 # Fine-Tuning Strategy of Qwen 1.7B
