@@ -172,7 +172,7 @@ def analyze():
         print(f"Loaded {len(personal_docs)} pages")
 
         text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=2000,   # size of each chunk
+        chunk_size=3000,   # size of each chunk
         chunk_overlap=200, # overlap between chunks
         length_function=len,)
 
