@@ -31,12 +31,19 @@ Clause_IQ/
 ├── helper.py                       # AI model helper functions
 ├── prompts.py                      # System prompts for AI classification
 ├── requirements.txt                # Python dependencies
+├── Dockerfile                      # Docker image configuration
+├── docker-compose.yml              # Docker orchestration
+├── .dockerignore                   # Docker build exclusions
+├── start-docker.sh                 # Quick start script (Mac/Linux)
+├── start-docker.bat                # Quick start script (Windows)
+├── DOCKER-README.md                # Comprehensive Docker guide
+├── DOCKER-SETUP-SUMMARY.md         # Quick Docker reference
 ├── templates/
 │   └── index.html                  # Web interface template
 ├── standard_tempate_default/       # Pre-built template documents
 │   ├── TN_Standard_Template_Redacted.pdf
 │   └── WA_Standard_Redacted.pdf
-├── training_code
+├── training_code/                  # Model training scripts
 └── uploads/                        # Temporary file storage (created automatically)
 ```
 
@@ -70,6 +77,116 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
+---
+
+## 🐳 Docker Deployment (Recommended)
+
+**Deploy with Docker for consistent, cross-platform deployment on Mac, Windows, and Linux.**
+
+### Prerequisites
+- Docker Desktop (Mac/Windows) or Docker Engine (Linux)
+- Docker Compose v2.0 or higher
+- At least 8GB of available RAM
+- 10GB of free disk space
+
+### Quick Start
+
+#### Option 1: Using Startup Scripts (Easiest)
+
+**Mac/Linux:**
+```bash
+chmod +x start-docker.sh
+./start-docker.sh
+```
+
+**Windows:**
+```cmd
+start-docker.bat
+```
+
+#### Option 2: Using Makefile (Recommended)
+
+```bash
+# First time setup
+make init
+
+# Start application
+make up
+
+# View logs
+make logs
+
+# Stop application
+make down
+
+# See all commands
+make help
+```
+
+#### Option 3: Using Docker Compose
+
+```bash
+# Build and start the application
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop the application
+docker-compose down
+```
+
+### Access the Application
+
+Once running, open your browser and navigate to:
+```
+http://localhost:5000
+```
+
+### Docker Configuration
+
+Create a `.env` file for environment variables:
+```bash
+cp .env.example .env
+# Edit .env with your API keys and configuration
+```
+
+### Common Docker Commands
+
+```bash
+# View running containers
+docker-compose ps
+
+# Rebuild after code changes
+docker-compose up -d --build
+
+# View resource usage
+docker stats clause_iq_app
+
+# Execute commands inside container
+docker-compose exec clause_iq bash
+
+# Clean up everything
+docker-compose down -v
+```
+
+### Platform-Specific Notes
+
+**Mac (Apple Silicon):** Works automatically with ARM64 architecture
+
+**Windows:** Ensure Docker Desktop is running and WSL2 integration is enabled
+
+**Linux:** Add your user to docker group:
+```bash
+sudo usermod -aG docker $USER
+newgrp docker
+```
+
+For detailed Docker documentation, troubleshooting, and production deployment guides, see:
+- **Quick Reference:** `DOCKER-SETUP-SUMMARY.md`
+- **Full Guide:** `DOCKER-README.md`
+
+---
 
 ## Usage
 
@@ -177,11 +294,6 @@ We combine **instruction tuning** (SFT) with **contrastive learning** (Triplet +
 
 ---
 
-### 📁 Repository Structure
-
-The final output is a single CSV file, training_dataset.csv, structured perfectly for fine-tuning.
-
----
 
 ### 📊 Data Format
 
