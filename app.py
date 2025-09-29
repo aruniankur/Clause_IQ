@@ -4,13 +4,14 @@ from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 import numpy as np
 import os
+import pandas as pd
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
 # Configuration
 UPLOAD_FOLDER = 'uploads'
-ALLOWED_EXTENSIONS = {'pdf', 'doc', 'docx'}
+ALLOWED_EXTENSIONS = {'pdf', 'doc', 'docx', 'xlsx', 'xls', 'csv'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 
@@ -25,6 +26,41 @@ standard_template = {
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+def process_attributes_file(file_path):
+    """
+    Process Excel or CSV file to extract attributes from the first column
+    """
+    try:
+        # Get file extension
+        file_ext = file_path.rsplit('.', 1)[1].lower()
+        
+        if file_ext == 'csv':
+            # Read CSV file
+            df = pd.read_csv(file_path)
+        elif file_ext in ['xlsx', 'xls']:
+            # Read Excel file
+            df = pd.read_excel(file_path)
+        else:
+            raise ValueError(f"Unsupported file format: {file_ext}")
+        
+        # Extract attributes from the first column
+        if df.empty:
+            raise ValueError("The file is empty")
+        
+        # Get the first column and remove any NaN values
+        attributes = df.iloc[:, 0].dropna().astype(str).tolist()
+        
+        # Clean up attributes (remove extra whitespace)
+        attributes = [attr.strip() for attr in attributes if attr.strip()]
+        
+        if not attributes:
+            raise ValueError("No valid attributes found in the first column")
+        
+        return attributes
+        
+    except Exception as e:
+        raise ValueError(f"Error processing attributes file: {str(e)}")
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -33,8 +69,36 @@ def index():
 def analyze():
     try:
         workflow = request.form.get('workflow')
-        attributes = request.form.get('attributes', '').split(',')
-        attributes = [attr.strip() for attr in attributes if attr.strip()]
+        attribute_input_type = request.form.get('attributeInputType', 'manual')
+        
+        # Process attributes based on input type
+        if attribute_input_type == 'file':
+            # Handle file upload for attributes
+            attributes_file = request.files.get('attributesFile')
+            if not attributes_file:
+                return jsonify({'error': 'Attributes file is required when file input type is selected'}), 400
+            
+            # Save the attributes file
+            attributes_filename = secure_filename(attributes_file.filename or 'attributes.csv')
+            attributes_path = os.path.join(app.config['UPLOAD_FOLDER'], attributes_filename)
+            attributes_file.save(attributes_path)
+            
+            # Process the attributes file
+            try:
+                attributes = process_attributes_file(attributes_path)
+            except ValueError as e:
+                return jsonify({'error': str(e)}), 400
+            finally:
+                # Clean up the temporary file
+                if os.path.exists(attributes_path):
+                    os.remove(attributes_path)
+        else:
+            # Handle manual input for attributes
+            attributes = request.form.get('attributes', '').split(',')
+            attributes = [attr.strip() for attr in attributes if attr.strip()]
+        
+        if not attributes:
+            return jsonify({'error': 'No attributes provided'}), 400
         
         if workflow == '1':
             # Workflow 1: User uploads own template
@@ -45,7 +109,7 @@ def analyze():
                 return jsonify({'error': 'Both template and personal files are required'}), 400
             
             if not allowed_file(template_file.filename) or not allowed_file(personal_file.filename):
-                return jsonify({'error': 'Invalid file type. Only PDF, DOC, DOCX files are allowed'}), 400
+                return jsonify({'error': 'Invalid file type. Only PDF, DOC, DOCX files are allowed for template and personal files'}), 400
             
             # Save uploaded files
             template_filename = secure_filename(template_file.filename or 'template.pdf')
@@ -69,7 +133,7 @@ def analyze():
                 return jsonify({'error': 'Template selection and personal file are required'}), 400
             
             if not allowed_file(personal_file.filename):
-                return jsonify({'error': 'Invalid file type. Only PDF, DOC, DOCX files are allowed'}), 400
+                return jsonify({'error': 'Invalid file type. Only PDF, DOC, DOCX files are allowed for personal files'}), 400
             
             # Get template path from standard templates
             if template_select not in standard_template:

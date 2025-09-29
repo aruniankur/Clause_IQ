@@ -130,7 +130,6 @@ dmypy.json
 
 # Project specific
 uploads/
-*.pdf
 *.doc
 *.docx
 *.txt

@@ -140,9 +140,40 @@
                                 <label class="form-label fw-bold">
                                     <i class="fas fa-list me-2"></i>Attributes to Compare
                                 </label>
-                                <textarea class="form-control" id="attributes1" name="attributes" rows="3" 
-                                    placeholder="Enter attributes separated by commas (e.g., Payment Terms, Delivery Schedule, Liability Limits)"></textarea>
-                                <div class="form-text">Specify the contract attributes you want to compare between your clause and the template</div>
+                                
+                                <!-- Toggle between manual input and file upload -->
+                                <div class="mb-3">
+                                    <div class="btn-group w-100" role="group">
+                                        <input type="radio" class="btn-check" name="attributeInputType1" id="manualInput1" value="manual" checked>
+                                        <label class="btn btn-outline-primary" for="manualInput1">
+                                            <i class="fas fa-keyboard me-2"></i>Manual Input
+                                        </label>
+                                        
+                                        <input type="radio" class="btn-check" name="attributeInputType1" id="fileUpload1" value="file">
+                                        <label class="btn btn-outline-primary" for="fileUpload1">
+                                            <i class="fas fa-file-excel me-2"></i>Upload File
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Manual Input Section -->
+                                <div id="manualInputSection1">
+                                    <textarea class="form-control" id="attributes1" name="attributes" rows="3" 
+                                        placeholder="Enter attributes separated by commas (e.g., Payment Terms, Delivery Schedule, Liability Limits)"></textarea>
+                                    <div class="form-text">Specify the contract attributes you want to compare between your clause and the template</div>
+                                </div>
+
+                                <!-- File Upload Section -->
+                                <div id="fileUploadSection1" style="display: none;">
+                                    <div class="upload-area" onclick="document.getElementById('attributesFile1').click()">
+                                        <i class="fas fa-file-excel fa-3x text-muted mb-3"></i>
+                                        <p class="mb-2">Click to upload Excel/CSV file</p>
+                                        <p class="text-muted small">Excel (.xlsx, .xls) or CSV files only</p>
+                                        <input type="file" id="attributesFile1" name="attributesFile" accept=".xlsx,.xls,.csv" style="display: none;">
+                                    </div>
+                                    <div id="attributesFile1Preview" class="mt-2"></div>
+                                    <div class="form-text">Upload an Excel or CSV file with attributes in the first column</div>
+                                </div>
                             </div>
 
                             <div class="mt-auto">
@@ -198,35 +229,66 @@
                                 <label class="form-label fw-bold">
                                     <i class="fas fa-check-square me-2"></i>Select Attributes to Compare
                                 </label>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="payment_terms" id="attr1">
-                                            <label class="form-check-label" for="attr1">Payment Terms</label>
+                                
+                                <!-- Toggle between predefined checkboxes and file upload -->
+                                <div class="mb-3">
+                                    <div class="btn-group w-100" role="group">
+                                        <input type="radio" class="btn-check" name="attributeInputType2" id="predefined2" value="predefined" checked>
+                                        <label class="btn btn-outline-primary" for="predefined2">
+                                            <i class="fas fa-check-square me-2"></i>Predefined
+                                        </label>
+                                        
+                                        <input type="radio" class="btn-check" name="attributeInputType2" id="fileUpload2" value="file">
+                                        <label class="btn btn-outline-primary" for="fileUpload2">
+                                            <i class="fas fa-file-excel me-2"></i>Upload File
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Predefined Attributes Section -->
+                                <div id="predefinedSection2">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="payment_terms" id="attr1">
+                                                <label class="form-check-label" for="attr1">Payment Terms</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="delivery_schedule" id="attr2">
+                                                <label class="form-check-label" for="attr2">Delivery Schedule</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="liability_limits" id="attr3">
+                                                <label class="form-check-label" for="attr3">Liability Limits</label>
+                                            </div>
                                         </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="delivery_schedule" id="attr2">
-                                            <label class="form-check-label" for="attr2">Delivery Schedule</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="liability_limits" id="attr3">
-                                            <label class="form-check-label" for="attr3">Liability Limits</label>
+                                        <div class="col-md-6">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="termination_clause" id="attr4">
+                                                <label class="form-check-label" for="attr4">Termination Clause</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="force_majeure" id="attr5">
+                                                <label class="form-check-label" for="attr5">Force Majeure</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" value="dispute_resolution" id="attr6">
+                                                <label class="form-check-label" for="attr6">Dispute Resolution</label>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="termination_clause" id="attr4">
-                                            <label class="form-check-label" for="attr4">Termination Clause</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="force_majeure" id="attr5">
-                                            <label class="form-check-label" for="attr5">Force Majeure</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="dispute_resolution" id="attr6">
-                                            <label class="form-check-label" for="attr6">Dispute Resolution</label>
-                                        </div>
+                                </div>
+
+                                <!-- File Upload Section -->
+                                <div id="fileUploadSection2" style="display: none;">
+                                    <div class="upload-area" onclick="document.getElementById('attributesFile2').click()">
+                                        <i class="fas fa-file-excel fa-3x text-muted mb-3"></i>
+                                        <p class="mb-2">Click to upload Excel/CSV file</p>
+                                        <p class="text-muted small">Excel (.xlsx, .xls) or CSV files only</p>
+                                        <input type="file" id="attributesFile2" name="attributesFile" accept=".xlsx,.xls,.csv" style="display: none;">
                                     </div>
+                                    <div id="attributesFile2Preview" class="mt-2"></div>
+                                    <div class="form-text">Upload an Excel or CSV file with attributes in the first column</div>
                                 </div>
                             </div>
 
@@ -308,6 +370,8 @@
         setupFileUpload('templateFile1', 'templateFile1Preview');
         setupFileUpload('personalFile1', 'personalFile1Preview');
         setupFileUpload('personalFile2', 'personalFile2Preview');
+        setupFileUpload('attributesFile1', 'attributesFile1Preview');
+        setupFileUpload('attributesFile2', 'attributesFile2Preview');
 
         // Drag and drop functionality
         function setupDragDrop(areaClass, inputId) {
@@ -338,6 +402,51 @@
         setupDragDrop('upload-area', 'templateFile1');
         setupDragDrop('upload-area', 'personalFile1');
         setupDragDrop('upload-area', 'personalFile2');
+        setupDragDrop('upload-area', 'attributesFile1');
+        setupDragDrop('upload-area', 'attributesFile2');
+
+        // Toggle functionality for attribute input types
+        function setupAttributeToggle(workflowNum) {
+            const manualInput = document.getElementById(`manualInput${workflowNum}`);
+            const fileUpload = document.getElementById(`fileUpload${workflowNum}`);
+            const predefined = document.getElementById(`predefined${workflowNum}`);
+            
+            const manualSection = document.getElementById(`manualInputSection${workflowNum}`);
+            const fileSection = document.getElementById(`fileUploadSection${workflowNum}`);
+            const predefinedSection = document.getElementById(`predefinedSection${workflowNum}`);
+
+            if (manualInput) {
+                manualInput.addEventListener('change', function() {
+                    if (this.checked) {
+                        manualSection.style.display = 'block';
+                        fileSection.style.display = 'none';
+                    }
+                });
+            }
+
+            if (fileUpload) {
+                fileUpload.addEventListener('change', function() {
+                    if (this.checked) {
+                        manualSection.style.display = 'none';
+                        fileSection.style.display = 'block';
+                        if (predefinedSection) predefinedSection.style.display = 'none';
+                    }
+                });
+            }
+
+            if (predefined) {
+                predefined.addEventListener('change', function() {
+                    if (this.checked) {
+                        predefinedSection.style.display = 'block';
+                        fileSection.style.display = 'none';
+                    }
+                });
+            }
+        }
+
+        // Setup toggles for both workflows
+        setupAttributeToggle(1);
+        setupAttributeToggle(2);
 
         // Form submission
         document.getElementById('workflow1Form').addEventListener('submit', function(e) {
@@ -354,16 +463,35 @@
             const formData = new FormData();
             const templateFile = document.getElementById('templateFile1').files[0];
             const personalFile = document.getElementById('personalFile1').files[0];
-            const attributes = document.getElementById('attributes1').value;
+            
+            // Check which attribute input method is selected
+            const attributeInputType = document.querySelector('input[name="attributeInputType1"]:checked').value;
+            let attributes = '';
+            
+            if (attributeInputType === 'manual') {
+                attributes = document.getElementById('attributes1').value;
+                if (!attributes.trim()) {
+                    alert('Please enter attributes manually or upload a file');
+                    return;
+                }
+            } else if (attributeInputType === 'file') {
+                const attributesFile = document.getElementById('attributesFile1').files[0];
+                if (!attributesFile) {
+                    alert('Please upload an attributes file');
+                    return;
+                }
+                formData.append('attributesFile', attributesFile);
+            }
 
-            if (!templateFile || !personalFile || !attributes) {
-                alert('Please fill in all fields');
+            if (!templateFile || !personalFile) {
+                alert('Please upload both template and personal files');
                 return;
             }
 
             formData.append('templateFile', templateFile);
             formData.append('personalFile', personalFile);
             formData.append('attributes', attributes);
+            formData.append('attributeInputType', attributeInputType);
             formData.append('workflow', '1');
 
             submitAnalysis(formData);
@@ -373,16 +501,36 @@
             const formData = new FormData();
             const templateSelect = document.getElementById('templateSelect').value;
             const personalFile = document.getElementById('personalFile2').files[0];
-            const selectedAttributes = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+            
+            // Check which attribute input method is selected
+            const attributeInputType = document.querySelector('input[name="attributeInputType2"]:checked').value;
+            let attributes = '';
+            
+            if (attributeInputType === 'predefined') {
+                const selectedAttributes = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+                if (selectedAttributes.length === 0) {
+                    alert('Please select at least one predefined attribute or upload a file');
+                    return;
+                }
+                attributes = selectedAttributes.join(',');
+            } else if (attributeInputType === 'file') {
+                const attributesFile = document.getElementById('attributesFile2').files[0];
+                if (!attributesFile) {
+                    alert('Please upload an attributes file');
+                    return;
+                }
+                formData.append('attributesFile', attributesFile);
+            }
 
-            if (!templateSelect || !personalFile || selectedAttributes.length === 0) {
-                alert('Please fill in all fields');
+            if (!templateSelect || !personalFile) {
+                alert('Please select a template and upload your personal file');
                 return;
             }
 
             formData.append('templateSelect', templateSelect);
             formData.append('personalFile', personalFile);
-            formData.append('attributes', selectedAttributes.join(','));
+            formData.append('attributes', attributes);
+            formData.append('attributeInputType', attributeInputType);
             formData.append('workflow', '2');
 
             submitAnalysis(formData);
