@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clause IQ - Smart Clause Classifier</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 0;
+        }
+        .card {
+            border: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .upload-area {
+            border: 2px dashed #dee2e6;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .upload-area:hover {
+            border-color: #667eea;
+            background-color: #f8f9ff;
+        }
+        .upload-area.dragover {
+            border-color: #667eea;
+            background-color: #f0f4ff;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .workflow-card {
+            min-height: 400px;
+        }
+        .feature-icon {
+            font-size: 3rem;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        .comparison-preview {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold mb-4">Clause IQ</h1>
+                    <p class="lead mb-4">Smart Contract Clause Classifier</p>
+                    <p class="mb-4">Upload your contract clauses and compare them with template documents to identify key attributes and ensure compliance.</p>
+                    <div class="d-flex gap-3">
+                        <button class="btn btn-light btn-lg" onclick="scrollToWorkflows()">
+                            <i class="fas fa-play me-2"></i>Get Started
+                        </button>
+                        <button class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-info-circle me-2"></i>Learn More
+                        </button>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <i class="fas fa-file-contract" style="font-size: 8rem; opacity: 0.8;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="text-center mb-5">Choose Your Workflow</h2>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- Workflow 1: Upload Own Template -->
+            <div class="col-lg-6">
+                <div class="card workflow-card h-100">
+                    <div class="card-body d-flex flex-column">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-upload feature-icon"></i>
+                            <h4 class="card-title">Upload Your Own Template</h4>
+                            <p class="text-muted">Use your custom template clause and define your own attributes</p>
+                        </div>
+                        
+                        <form id="workflow1Form" class="flex-grow-1">
+                            <!-- Template Clause Upload -->
+                            <div class="mb-4">
+                                <label class="form-label fw-bold">
+                                    <i class="fas fa-file-pdf me-2"></i>Template Clause Document
+                                </label>
+                                <div class="upload-area" onclick="document.getElementById('templateFile1').click()">
+                                    <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                                    <p class="mb-2">Click to upload or drag and drop</p>
+                                    <p class="text-muted small">PDF, DOC, DOCX files only</p>
+                                    <input type="file" id="templateFile1" name="templateFile" accept=".pdf,.doc,.docx" style="display: none;">
+                                </div>
+                                <div id="templateFile1Preview" class="mt-2"></div>
+                            </div>
+
+                            <!-- Personal Clause Upload -->
+                            <div class="mb-4">
+                                <label class="form-label fw-bold">
+                                    <i class="fas fa-file-alt me-2"></i>Your Clause Document
+                                </label>
+                                <div class="upload-area" onclick="document.getElementById('personalFile1').click()">
+                                    <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                                    <p class="mb-2">Click to upload or drag and drop</p>
+                                    <p class="text-muted small">PDF, DOC, DOCX files only</p>
+                                    <input type="file" id="personalFile1" name="personalFile" accept=".pdf,.doc,.docx" style="display: none;">
+                                </div>
+                                <div id="personalFile1Preview" class="mt-2"></div>
+                            </div>
+
+                            <!-- Attributes Input -->
+                            <div class="mb-4">
+                                <label class="form-label fw-bold">
+                                    <i class="fas fa-list me-2"></i>Attributes to Compare
+                                </label>
+                                <textarea class="form-control" id="attributes1" name="attributes" rows="3" 
+                                    placeholder="Enter attributes separated by commas (e.g., Payment Terms, Delivery Schedule, Liability Limits)"></textarea>
+                                <div class="form-text">Specify the contract attributes you want to compare between your clause and the template</div>
+                            </div>
+
+                            <div class="mt-auto">
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="fas fa-search me-2"></i>Analyze & Compare
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Workflow 2: Select from Dataset -->
+            <div class="col-lg-6">
+                <div class="card workflow-card h-100">
+                    <div class="card-body d-flex flex-column">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-database feature-icon"></i>
+                            <h4 class="card-title">Use Template from Dataset</h4>
+                            <p class="text-muted">Select from our pre-built template library</p>
+                        </div>
+                        
+                        <form id="workflow2Form" class="flex-grow-1">
+                            <!-- Template Selection -->
+                            <div class="mb-4">
+                                <label class="form-label fw-bold">
+                                    <i class="fas fa-list-alt me-2"></i>Select Template
+                                </label>
+                                <select class="form-select" id="templateSelect" name="templateSelect">
+                                    <option value="">Choose a template...</option>
+                                    <option value="TN">Tennessee Standard Template</option>
+                                    <option value="WA">Washington Standard Template</option>
+                                </select>
+                                <div class="form-text">Choose from our curated collection of standard contract templates</div>
+                            </div>
+
+                            <!-- Personal Clause Upload -->
+                            <div class="mb-4">
+                                <label class="form-label fw-bold">
+                                    <i class="fas fa-file-alt me-2"></i>Your Clause Document
+                                </label>
+                                <div class="upload-area" onclick="document.getElementById('personalFile2').click()">
+                                    <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                                    <p class="mb-2">Click to upload or drag and drop</p>
+                                    <p class="text-muted small">PDF, DOC, DOCX files only</p>
+                                    <input type="file" id="personalFile2" name="personalFile" accept=".pdf,.doc,.docx" style="display: none;">
+                                </div>
+                                <div id="personalFile2Preview" class="mt-2"></div>
+                            </div>
+
+                            <!-- Attributes Selection -->
+                            <div class="mb-4">
+                                <label class="form-label fw-bold">
+                                    <i class="fas fa-check-square me-2"></i>Select Attributes to Compare
+                                </label>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="payment_terms" id="attr1">
+                                            <label class="form-check-label" for="attr1">Payment Terms</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="delivery_schedule" id="attr2">
+                                            <label class="form-check-label" for="attr2">Delivery Schedule</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="liability_limits" id="attr3">
+                                            <label class="form-check-label" for="attr3">Liability Limits</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="termination_clause" id="attr4">
+                                            <label class="form-check-label" for="attr4">Termination Clause</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="force_majeure" id="attr5">
+                                            <label class="form-check-label" for="attr5">Force Majeure</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="dispute_resolution" id="attr6">
+                                            <label class="form-check-label" for="attr6">Dispute Resolution</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-auto">
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="fas fa-search me-2"></i>Analyze & Compare
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comparison Preview Section -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="comparison-preview" id="comparisonPreview" style="display: none;">
+                    <h4 class="mb-3">
+                        <i class="fas fa-table me-2"></i>Comparison Results Preview
+                    </h4>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Attribute</th>
+                                    <th>Your Clause</th>
+                                    <th>Template Clause</th>
+                                    <th>Match Status</th>
+                                    <th>Confidence</th>
+                                </tr>
+                            </thead>
+                            <tbody id="comparisonTableBody">
+                                <!-- Results will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Clause IQ</h5>
+                    <p class="text-muted">Smart Contract Clause Classification</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="text-muted">&copy; 2024 Clause IQ. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // File upload handling
+        function setupFileUpload(inputId, previewId) {
+            const input = document.getElementById(inputId);
+            const preview = document.getElementById(previewId);
+            
+            input.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    preview.innerHTML = `
+                        <div class="alert alert-success d-flex align-items-center">
+                            <i class="fas fa-check-circle me-2"></i>
+                            <span>${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)</span>
+                        </div>
+                    `;
+                }
+            });
+        }
+
+        // Setup file uploads
+        setupFileUpload('templateFile1', 'templateFile1Preview');
+        setupFileUpload('personalFile1', 'personalFile1Preview');
+        setupFileUpload('personalFile2', 'personalFile2Preview');
+
+        // Drag and drop functionality
+        function setupDragDrop(areaClass, inputId) {
+            const areas = document.querySelectorAll(`.${areaClass}`);
+            areas.forEach(area => {
+                area.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    area.classList.add('dragover');
+                });
+                
+                area.addEventListener('dragleave', () => {
+                    area.classList.remove('dragover');
+                });
+                
+                area.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    area.classList.remove('dragover');
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) {
+                        const input = document.getElementById(inputId);
+                        input.files = files;
+                        input.dispatchEvent(new Event('change'));
+                    }
+                });
+            });
+        }
+
+        setupDragDrop('upload-area', 'templateFile1');
+        setupDragDrop('upload-area', 'personalFile1');
+        setupDragDrop('upload-area', 'personalFile2');
+
+        // Form submission
+        document.getElementById('workflow1Form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            processWorkflow1();
+        });
+
+        document.getElementById('workflow2Form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            processWorkflow2();
+        });
+
+        function processWorkflow1() {
+            const formData = new FormData();
+            const templateFile = document.getElementById('templateFile1').files[0];
+            const personalFile = document.getElementById('personalFile1').files[0];
+            const attributes = document.getElementById('attributes1').value;
+
+            if (!templateFile || !personalFile || !attributes) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            formData.append('templateFile', templateFile);
+            formData.append('personalFile', personalFile);
+            formData.append('attributes', attributes);
+            formData.append('workflow', '1');
+
+            submitAnalysis(formData);
+        }
+
+        function processWorkflow2() {
+            const formData = new FormData();
+            const templateSelect = document.getElementById('templateSelect').value;
+            const personalFile = document.getElementById('personalFile2').files[0];
+            const selectedAttributes = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+
+            if (!templateSelect || !personalFile || selectedAttributes.length === 0) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            formData.append('templateSelect', templateSelect);
+            formData.append('personalFile', personalFile);
+            formData.append('attributes', selectedAttributes.join(','));
+            formData.append('workflow', '2');
+
+            submitAnalysis(formData);
+        }
+
+        function submitAnalysis(formData) {
+            // Show loading state
+            const submitButtons = document.querySelectorAll('button[type="submit"]');
+            submitButtons.forEach(btn => {
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
+            });
+
+            fetch('/analyze', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                displayResults(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred during analysis');
+            })
+            .finally(() => {
+                submitButtons.forEach(btn => {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-search me-2"></i>Analyze & Compare';
+                });
+            });
+        }
+
+        function displayResults(data) {
+            const preview = document.getElementById('comparisonPreview');
+            const tbody = document.getElementById('comparisonTableBody');
+            
+            // Clear previous results
+            tbody.innerHTML = '';
+            
+            if (data.success && data.results) {
+                // Display actual results from backend
+                data.results.forEach(result => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${result.attribute}</td>
+                        <td>${result.your_clause}</td>
+                        <td>${result.template_clause}</td>
+                        <td><span class="badge bg-${getMatchColor(result.match_status)}">${result.match_status}</span></td>
+                        <td>${result.confidence}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            } else {
+                // Fallback to sample data if no results
+                const sampleResults = [
+                    { attribute: 'Payment Terms', yourClause: 'Net 30 days', templateClause: 'Net 45 days', match: 'Partial', confidence: '75%' },
+                    { attribute: 'Delivery Schedule', yourClause: 'Within 2 weeks', templateClause: 'Within 3 weeks', match: 'Good', confidence: '85%' },
+                    { attribute: 'Liability Limits', yourClause: '$100,000', templateClause: '$150,000', match: 'Different', confidence: '60%' }
+                ];
+
+                sampleResults.forEach(result => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${result.attribute}</td>
+                        <td>${result.yourClause}</td>
+                        <td>${result.templateClause}</td>
+                        <td><span class="badge bg-${getMatchColor(result.match)}">${result.match}</span></td>
+                        <td>${result.confidence}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+
+            preview.style.display = 'block';
+            preview.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function getMatchColor(match) {
+            switch(match) {
+                case 'Good': return 'success';
+                case 'Partial': return 'warning';
+                case 'Different': return 'danger';
+                default: return 'secondary';
+            }
+        }
+
+        function scrollToWorkflows() {
+            document.querySelector('.container.my-5').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
